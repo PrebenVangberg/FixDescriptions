@@ -6,6 +6,8 @@ namespace FixDescriptions
 {
     class Program
     {
+
+        //The file that read special cases
         Filereader filereader;
 
         public Program()
