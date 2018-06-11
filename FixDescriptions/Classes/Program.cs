@@ -6,8 +6,7 @@ namespace FixDescriptions
 {
     class Program
     {
-
-        //The file that read special cases
+        
         Filereader filereader;
 
         public Program()
@@ -19,7 +18,7 @@ namespace FixDescriptions
 
             try
             {
-                for (int i = 0; i < excel.getRows() && i < 50000; i++)
+                for (int i = 0; i < excel.getRows() && i < 10; i++)
                 {
                     excel.WriteCell(i, 0, FixRow(excel.ReadCell(i, 0)));
                 }
@@ -103,28 +102,31 @@ namespace FixDescriptions
             for (int i = 0; i < words.Length; i++)
             {
                 words[i] = FixWord(words[i]);
+
+                //Uppercase exceptions
+                foreach (string uppercase in filereader.uppercase)
+                {
+                    string fixedWord = words[i].Replace("(", " ").Replace(")", " ").Trim();
+                    if (fixedWord.Equals(uppercase))                        
+                    {
+                        words[i] = words[i].Replace(uppercase, uppercase.ToUpper());
+                    }
+                }
+
+                //lowercase exception
+                foreach (string lowercase in filereader.lowercase)
+                {
+                    string fixedWord = words[i].Replace("(", " ").Replace(")", " ").Trim();
+                    if (fixedWord.Equals(lowercase))
+                    {
+                        words[i] = words[i].Replace(lowercase, lowercase.ToLower());
+                    }
+                }
+
+
             }
 
             s = string.Join(" ", words);
-
-            //Gjer alle uppercase ord uppercase
-            foreach(string uppercase in filereader.uppercase)
-            {
-                if (s.Contains(uppercase))
-                {
-                    s = s.Replace(uppercase, uppercase.ToUpper());
-                }
-            }
-
-            //Gjer Alle lowercase ord til lowercase
-
-            foreach (string lowercase in filereader.lowercase)
-            {
-                if (s.Contains(lowercase))
-                {
-                    s = s.Replace(lowercase, lowercase.ToLower());
-                }
-            }
 
             Console.WriteLine(s);
             return s;
@@ -142,5 +144,6 @@ namespace FixDescriptions
             }
 
         }
+
     }
 }
